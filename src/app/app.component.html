@@ -17,7 +17,7 @@
               <div class="col-6">
                 <label for="email">Email</label>
                 <input type="email" class="form-control" id="email" formControlName="email"
-                       [ngClass]="{ 'is-invalid': (email.dirty || email.touched) && !email.valid }">
+                       [ngClass]="{ 'is-invalid': form.get('emailGroup').errors || ((email.dirty || email.touched) && !email.valid) }">
                 <div class="invalid-feedback">
                   <span *ngIf="email.errors?.required">Email is required.</span>
                   <span *ngIf="email.errors?.email">Provide a valid email.</span>
@@ -26,9 +26,10 @@
               <div class="col-6">
                 <label for="confirmEmail">Confirm Email</label>
                 <input type="email" class="form-control" id="confirmEmail" formControlName="confirmEmail"
-                       [ngClass]="{ 'is-invalid': (confirmEmail.dirty || confirmEmail.touched) && !confirmEmail.valid }">
+                       [ngClass]="{ 'is-invalid': form.get('emailGroup').errors || ((confirmEmail.dirty || confirmEmail.touched) && !confirmEmail.valid) }">
                 <div class="invalid-feedback">
                   <span *ngIf="confirmEmail.errors?.required">Confirmation email is required.</span>
+                  <span *ngIf="form.get('emailGroup').errors?.match">Emails do not match.</span>
                 </div>
               </div>
             </div>
