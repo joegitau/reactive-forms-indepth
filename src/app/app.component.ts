@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { EmailMatcher } from './validation/form-validation';
+import { emailMatcher, minMaxValidator } from './validation/form-validation';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +17,9 @@ export class AppComponent {
   get name() { return this.form.get('name'); }
   get email() { return this.form.get('emailGroup.email'); }
   get confirmEmail() { return this.form.get('emailGroup.confirmEmail'); }
+  get employeeId() { return this.form.get('employeeId'); }
+  get start() { return this.form.get('employmentDates.start'); }
+  get end() { return this.form.get('employmentDates.end'); }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -24,8 +27,13 @@ export class AppComponent {
       emailGroup: this.fb.group({
         email: ['', [Validators.required, Validators.email]],
         confirmEmail: ['', [Validators.required]]
-      }, { validator: EmailMatcher }),
-
+      }, { validator: emailMatcher }),
+      role: ['employer'],
+      employeeId: null,
+      employmentDates: this.fb.group({
+        start: '',
+        end: ''
+      }, { validator: minMaxValidator }),
     });
   }
 
@@ -33,5 +41,25 @@ export class AppComponent {
     if (this.form.valid) {
       console.log(this.form.value);
     }
+  }
+
+  setRole(role: string): void {
+    const employeeId = this.form.get('employeeId'),
+          start = this.form.get('employmentDates.start'),
+          end = this.form.get('employmentDates.end');
+
+    if (role === 'employee') {
+      employeeId.setValidators(Validators.required);
+      start.setValidators(Validators.required);
+      end.setValidators(Validators.required);
+    } else {
+      employeeId.clearValidators();
+      start.clearValidators();
+      end.clearValidators();
+    }
+
+    employeeId.updateValueAndValidity();
+    start.updateValueAndValidity();
+    end.updateValueAndValidity();
   }
 }
