@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 import { emailMatcher, minMaxValidator, rangeValidator } from './validation/form-validation';
 
@@ -10,6 +11,12 @@ import { emailMatcher, minMaxValidator, rangeValidator } from './validation/form
 })
 export class AppComponent {
   form: FormGroup;
+  errorMessage: string;
+
+  private nameValidationMessages = {
+    required: 'Name is required.',
+    minlength: 'Name must have more than 3 characters.'
+  }
 
   constructor(private fb: FormBuilder) {
   }
@@ -37,6 +44,23 @@ export class AppComponent {
         end: ''
       }, { validator: minMaxValidator }),
     });
+
+    const roleControl = this.form.get('role');
+    roleControl.valueChanges.subscribe(v => this.setRole(v));
+
+    this.name.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe(v => this.setErrorMessage(this.name));
+  }
+
+  setErrorMessage(c: AbstractControl) {
+    this.errorMessage = '';
+
+    if ((c.dirty || c.touched) && c.errors) {
+      this.errorMessage = Object.keys(c.errors)
+        .map(err => this.errorMessage += this.nameValidationMessages[err])
+        .join(' ');
+    }
   }
 
   register() {
@@ -47,8 +71,8 @@ export class AppComponent {
 
   setRole(role: string): void {
     const employeeId = this.form.get('employeeId'),
-          start = this.form.get('employmentDates.start'),
-          end = this.form.get('employmentDates.end');
+          start      = this.form.get('employmentDates.start'),
+          end        = this.form.get('employmentDates.end');
 
     if (role === 'employee') {
       employeeId.setValidators(Validators.required);
