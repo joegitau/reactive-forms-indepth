@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { emailMatcher, minMaxValidator } from './validation/form-validation';
+import { emailMatcher, minMaxValidator, rangeValidator } from './validation/form-validation';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +17,7 @@ export class AppComponent {
   get name() { return this.form.get('name'); }
   get email() { return this.form.get('emailGroup.email'); }
   get confirmEmail() { return this.form.get('emailGroup.confirmEmail'); }
+  get skillLevel() { return this.form.get('skillLevel'); }
   get employeeId() { return this.form.get('employeeId'); }
   get start() { return this.form.get('employmentDates.start'); }
   get end() { return this.form.get('employmentDates.end'); }
@@ -28,6 +29,7 @@ export class AppComponent {
         email: ['', [Validators.required, Validators.email]],
         confirmEmail: ['', [Validators.required]]
       }, { validator: emailMatcher }),
+      skillLevel: [null, rangeValidator(1, 10)],
       role: ['employer'],
       employeeId: null,
       employmentDates: this.fb.group({

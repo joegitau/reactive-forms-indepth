@@ -33,6 +33,14 @@
                 </div>
               </div>
             </div>
+            <div class="form-group mb-2">
+              <label for="skillLevel">Skills level <small>(optional)</small></label>
+              <input type="number" class="form-control" id="skillLevel" formControlName="skillLevel"
+                     [ngClass]="{ 'is-invalid': (skillLevel.dirty || skillLevel.touched) && !skillLevel.valid }">
+              <div class="invalid-feedback">
+                <span *ngIf="skillLevel.errors?.range">Skill level range is between 1 - 10.</span>
+              </div>
+            </div>
             <hr>
             <div class="row mb-2">
               <div class="col"><h6>Role</h6></div>
