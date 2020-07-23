@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray, FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { emailMatcher, minMaxValidator, rangeValidator } from './validation/form-validation';
@@ -33,6 +33,10 @@ export class AppComponent {
     return <FormArray>this.form.get('addresses');
   }
 
+  get hobbies(): FormArray {
+    return <FormArray>this.form.get('hobbies');
+  }
+
   ngOnInit(): void {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -48,7 +52,7 @@ export class AppComponent {
         start: '',
         end: ''
       }, { validator: minMaxValidator }),
-      hobbies: '',
+      hobbies: this.fb.array([ this.buildHobby() ]),
     });
 
     const roleControl = this.form.get('role');
@@ -69,8 +73,16 @@ export class AppComponent {
     });
   }
 
+  buildHobby(): FormControl {
+    return this.fb.control('')
+  }
+
   addAddress(): void {
     this.addresses.push(this.buildAddress());
+  }
+
+  addHobby(): void {
+    this.hobbies.push(this.buildHobby());
   }
 
   setRole(role: string): void {

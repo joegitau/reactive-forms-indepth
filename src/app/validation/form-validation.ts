@@ -36,6 +36,7 @@ export function minMaxValidator(c: AbstractControl): {[key:string]: boolean} | n
 
 /**
  * Custom validator with multiple params
+ * @param min, @param max
  */
 export function rangeValidator(min: number, max: number): ValidatorFn {
   return (c: AbstractControl): {[key: string]: boolean} | null => {

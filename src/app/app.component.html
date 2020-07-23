@@ -143,9 +143,14 @@
               </div>
             </div>
             <hr>
-            <div class="form-group mb-2">
-              <label for="hobbies">Hobbies</label>
-              <input type="text" class="form-control" id="hobbies" formControlName="hobbies">
+            <div class="d-flex justify-content-between mb-2">
+              <span for="hobbies">Hobbies</span>
+              <button class="btn btn-sm btn-outline-info" (click)="addHobby()">Add Hobby</button>
+            </div>
+            <div formArrayName="hobbies" *ngFor="let hobby of hobbies.controls; let i=index">
+              <div class="form-group mb-2">
+                <input type="text" class="form-control form-control-sm" [formControlName]="i">
+              </div>
             </div>
             <hr>
             <div class="form-group">
