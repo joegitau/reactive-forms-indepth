@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { emailMatcher, minMaxValidator, rangeValidator } from './validation/form-validation';
@@ -29,6 +29,10 @@ export class AppComponent {
   get start() { return this.form.get('employmentDates.start'); }
   get end() { return this.form.get('employmentDates.end'); }
 
+  get addresses(): FormArray {
+    return <FormArray>this.form.get('addresses');
+  }
+
   ngOnInit(): void {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -37,12 +41,14 @@ export class AppComponent {
         confirmEmail: ['', [Validators.required]]
       }, { validator: emailMatcher }),
       skillLevel: [null, rangeValidator(1, 10)],
+      addresses: this.fb.array([ this.buildAddress() ]),
       role: ['employer'],
       employeeId: null,
       employmentDates: this.fb.group({
         start: '',
         end: ''
       }, { validator: minMaxValidator }),
+      hobbies: '',
     });
 
     const roleControl = this.form.get('role');
@@ -53,20 +59,18 @@ export class AppComponent {
       .subscribe(v => this.setErrorMessage(this.name));
   }
 
-  setErrorMessage(c: AbstractControl) {
-    this.errorMessage = '';
-
-    if ((c.dirty || c.touched) && c.errors) {
-      this.errorMessage = Object.keys(c.errors)
-        .map(err => this.errorMessage += this.nameValidationMessages[err])
-        .join(' ');
-    }
+  buildAddress(): FormGroup {
+    return this.fb.group({
+      addressType: 'home',
+      street: '',
+      postalCode: null,
+      city: '',
+      country: ''
+    });
   }
 
-  register() {
-    if (this.form.valid) {
-      console.log(this.form.value);
-    }
+  addAddress(): void {
+    this.addresses.push(this.buildAddress());
   }
 
   setRole(role: string): void {
@@ -87,5 +91,21 @@ export class AppComponent {
     employeeId.updateValueAndValidity();
     start.updateValueAndValidity();
     end.updateValueAndValidity();
+  }
+
+  setErrorMessage(c: AbstractControl) {
+    this.errorMessage = '';
+
+    if ((c.dirty || c.touched) && c.errors) {
+      this.errorMessage = Object.keys(c.errors)
+        .map(err => this.errorMessage += this.nameValidationMessages[err])
+        .join(' ');
+    }
+  }
+
+  register() {
+    if (this.form.valid) {
+      console.log(this.form.value);
+    }
   }
 }
