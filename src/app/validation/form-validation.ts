@@ -21,28 +21,28 @@ export function emailMatcher(c: AbstractControl): {[key: string]: boolean} | nul
  * Validate that start date is not greater than a specified end date
  * @param c
  */
-export function minMaxValidator(c: AbstractControl): {[key:string]: boolean} | null {
-  const start = c.get('start');
-  const end = c.get('end');
+// export function minMaxValidator(c: AbstractControl): {[key:string]: boolean} | null {
+//   const start = c.get('start');
+//   const end = c.get('end');
 
-  if (start.pristine || end.pristine)
-    return null;
+//   if (start.pristine || end.pristine)
+//     return null;
 
-  if (start.value <= end.value)
-    return null;
+//   if (start.value <= end.value)
+//     return null;
 
-  return { 'minMax': true };
-}
+//   return { 'minMax': true };
+// }
 
 /**
  * Custom validator with multiple params
  * @param min, @param max
  */
-export function rangeValidator(min: number, max: number): ValidatorFn {
-  return (c: AbstractControl): {[key: string]: boolean} | null => {
-    if (c.value !== null && isNaN(c.value) || c.value <= min || c.value >= max) {
-      return { 'range': true };
-    }
-    return null;
-  }
-}
+// export function rangeValidator(min: number, max: number): ValidatorFn {
+//   return (c: AbstractControl): {[key: string]: boolean} | null => {
+//     if (c.value !== null && isNaN(c.value) || c.value <= min || c.value >= max) {
+//       return { 'range': true };
+//     }
+//     return null;
+//   }
+// }

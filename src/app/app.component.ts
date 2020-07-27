@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray, FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { Component } from '@angular/core';
 
-import { emailMatcher, minMaxValidator, rangeValidator } from './validation/form-validation';
+import { NumberValidator } from './validation/number.valdator';
+import { emailMatcher } from './validation/form-validation';
 
 @Component({
   selector: 'app-root',
@@ -44,14 +45,14 @@ export class AppComponent {
         email: ['', [Validators.required, Validators.email]],
         confirmEmail: ['', [Validators.required]]
       }, { validator: emailMatcher }),
-      skillLevel: [null, rangeValidator(1, 10)],
+      skillLevel: [null, NumberValidator.rangeValidator(1, 10)],
       addresses: this.fb.array([ this.buildAddress() ]),
       role: ['employer'],
       employeeId: null,
       employmentDates: this.fb.group({
         start: '',
         end: ''
-      }, { validator: minMaxValidator }),
+      }, { validator: NumberValidator.dateComparator }),
       hobbies: this.fb.array([ this.buildHobby() ]),
     });
 
@@ -73,12 +74,12 @@ export class AppComponent {
     });
   }
 
-  buildHobby(): FormControl {
-    return this.fb.control('')
-  }
-
   addAddress(): void {
     this.addresses.push(this.buildAddress());
+  }
+
+  buildHobby(): FormControl {
+    return this.fb.control('');
   }
 
   addHobby(): void {
@@ -105,7 +106,7 @@ export class AppComponent {
     end.updateValueAndValidity();
   }
 
-  setErrorMessage(c: AbstractControl) {
+  setErrorMessage(c: AbstractControl): void {
     this.errorMessage = '';
 
     if ((c.dirty || c.touched) && c.errors) {
@@ -115,7 +116,7 @@ export class AppComponent {
     }
   }
 
-  register() {
+  register(): void {
     if (this.form.valid) {
       console.log(this.form.value);
     }

@@ -38,11 +38,9 @@
               </div>
             </div>
             <hr>
-            <div class="row mb-2">
-              <div class="col"><h6>Address</h6></div>
-              <div class="col-6">
-                <button class="btn btn-sm btn-secondary" (click)="addAddress()">Add address</button>
-              </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Address</span>
+              <button class="btn btn-sm btn-outline-dark" (click)="addAddress()">Add address</button>
             </div>
             <div formArrayName="addresses" *ngFor="let address of addresses.controls; let i=index">
               <div [formGroupName]="i">
@@ -78,19 +76,21 @@
                   <div class="col-6">
                     <label attr.for="{{ 'city' + i }}">City</label>
                     <select id="{{ 'city' + i }}" class="form-control form-control-sm" formControlName="city">
-                      <option>Helsinki</option>
-                      <option>Espoo</option>
-                      <option>Vantaa</option>
-                      <option>Nairobi</option>
-                      <option>Other</option>
+                      <option selected>Select city</option>
+                      <option value="helsinki">Helsinki</option>
+                      <option value="espoo">Espoo</option>
+                      <option value="vantaa">Vantaa</option>
+                      <option value="nairobi">Nairobi</option>
+                      <option value="other">Other</option>
                     </select>
                   </div>
                   <div class="col-6">
                     <label attr.for="{{ 'country' + i }}">Country</label>
                     <select name="" id="{{ 'country' + i }}" class="form-control form-control-sm" formControlName="country">
-                      <option>Finland</option>
-                      <option>Kenya</option>
-                      <option>Other</option>
+                      <option selected>Select country</option>
+                      <option value="finland">Finland</option>
+                      <option value="kenya">Kenya</option>
+                      <option value="other">Other</option>
                     </select>
                   </div>
                 </div>
@@ -130,7 +130,7 @@
                       [ngClass]="{ 'is-invalid': form.get('employmentDates').errors || ((start.dirty || start.touched) && !start.valid) }">
                 <div class="invalid-feedback">
                   <span *ngIf="start.errors?.required">Start date is required.</span>
-                  <span *ngIf="form.get('employmentDates').errors?.minMax">Start date cannot be greater than End date.</span>
+                  <span *ngIf="form.get('employmentDates').errors?.compare">Start date cannot be greater than End date.</span>
                 </div>
               </div>
               <div class="col-6">
@@ -144,8 +144,8 @@
             </div>
             <hr>
             <div class="d-flex justify-content-between mb-2">
-              <span for="hobbies">Hobbies</span>
-              <button class="btn btn-sm btn-outline-info" (click)="addHobby()">Add Hobby</button>
+              <span>Hobbies</span>
+              <button class="btn btn-sm btn-outline-dark" (click)="addHobby()">Add Hobby</button>
             </div>
             <div formArrayName="hobbies" *ngFor="let hobby of hobbies.controls; let i=index">
               <div class="form-group mb-2">
