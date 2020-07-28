@@ -1,7 +1,7 @@
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 describe('AppComponent', () => {
@@ -35,8 +35,9 @@ describe('AppComponent', () => {
     expect(h4Element.nativeElement.textContent).toBe('Registration Form');
   });
 
-  it('should validate that "name" is REQUIRED & MINIMUM_LENGTH(3)', () => {
+  it('should validate that "name" is REQUIRED and MINIMUM LENGTH is 3 characters', () => {
     let name = component.name;
+
     expect(name.valid).toBeFalsy();
     expect(name.pristine).toBeTruthy();
 
@@ -46,5 +47,27 @@ describe('AppComponent', () => {
     expect(name.errors.minlength).toBeTruthy();
   });
 
-});
+  it('should validate the "emailGroup" for matching emails', () => {
+    let email: AbstractControl = component.email;
+    let confirmEmail: AbstractControl = component.confirmEmail;
+    let emailGroup: AbstractControl = component.form.get('emailGroup');
 
+    expect(email.errors.required).toBeTruthy();
+    expect(confirmEmail.errors.required).toBeTruthy();
+
+    email.setValue('joseph.karanja@hotmail.com');
+    confirmEmail.setValue('kajoe@live.com');
+    // fixture.detectChanges();
+    // expect(emailGroup.errors['match']).toBeTruthy();
+  });
+
+  it('should validate that form is invalid & submit btn is disabled on initialization', () => {
+    // form is invalid onInit
+    expect(component.form.valid).toBeFalsy();
+
+    // submit button is disabled onInit
+    let btn = fixture.debugElement.query(By.css('button[type=submit]'));
+    expect(btn.nativeElement.disabled).toBeTruthy();
+  });
+
+});
