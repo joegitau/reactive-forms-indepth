@@ -64,7 +64,7 @@ export class AppComponent {
       .subscribe(v => this.setErrorMessage(this.name));
   }
 
-  buildAddress(): FormGroup {
+  private buildAddress(): FormGroup {
     return this.fb.group({
       addressType: 'home',
       street: '',
@@ -78,7 +78,7 @@ export class AppComponent {
     this.addresses.push(this.buildAddress());
   }
 
-  buildHobby(): FormControl {
+  private buildHobby(): FormControl {
     return this.fb.control('');
   }
 
@@ -106,7 +106,7 @@ export class AppComponent {
     end.updateValueAndValidity();
   }
 
-  setErrorMessage(c: AbstractControl): void {
+  private setErrorMessage(c: AbstractControl): void {
     this.errorMessage = '';
 
     if ((c.dirty || c.touched) && c.errors) {
